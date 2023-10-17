@@ -1,8 +1,8 @@
 package org.bookstore.repository.impl;
 
 import java.util.List;
+import java.util.Optional;
 import org.bookstore.exceptions.DataProcessingException;
-import org.bookstore.exceptions.EntityNotFoundException;
 import org.bookstore.model.Book;
 import org.bookstore.repository.BookRepository;
 import org.hibernate.Session;
@@ -44,11 +44,7 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Book findById(Long id) {
-        try (Session session = sessionFactory.openSession()) {
-            return session.get(Book.class, id);
-        } catch (Exception e) {
-            throw new EntityNotFoundException("Can't find book with id " + id, e);
-        }
+    public Optional<Book> findById(Long id) {
+        return sessionFactory.fromSession(s -> Optional.ofNullable(s.get(Book.class, id)));
     }
 }
