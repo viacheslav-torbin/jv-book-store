@@ -1,6 +1,7 @@
 package org.bookstore.repository.impl;
 
 import java.util.List;
+import java.util.Optional;
 import org.bookstore.exceptions.DataProcessingException;
 import org.bookstore.model.Book;
 import org.bookstore.repository.BookRepository;
@@ -40,5 +41,10 @@ public class BookRepositoryImpl implements BookRepository {
         } catch (Exception e) {
             throw new DataProcessingException("Can't get all books", e);
         }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        return sessionFactory.fromSession(s -> Optional.ofNullable(s.get(Book.class, id)));
     }
 }
