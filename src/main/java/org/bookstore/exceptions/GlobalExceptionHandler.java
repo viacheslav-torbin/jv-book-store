@@ -36,19 +36,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {EntityNotFoundException.class})
-    private ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("errors", ex.getMessage());
-        HttpStatusCode status = HttpStatus.NOT_FOUND;
-        return new ResponseEntity<>(body, status);
+    public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {DataProcessingException.class})
-    private ResponseEntity<Object> handleDataProcessingException(EntityNotFoundException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("errors", ex.getMessage());
-        HttpStatusCode status = HttpStatus.I_AM_A_TEAPOT;
-        return new ResponseEntity<>(body, status);
+    public ResponseEntity<Object> handleDataProcessingException(DataProcessingException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     private String getErrorMessage(ObjectError objectError) {
