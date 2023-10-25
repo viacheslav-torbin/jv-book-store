@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 
 public record CreateBookRequestDto(
         Long id,
-        @NotBlank String title,
+        @NotBlank
+        String title,
         @NotBlank
         String author,
         @NotBlank
