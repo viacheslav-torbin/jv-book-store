@@ -45,6 +45,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
+    @ExceptionHandler(value = {RegistrationException.class})
+    protected ResponseEntity<String> handleRegistrationExceptions(RegistrationException ex) {
+        return new ResponseEntity<>("registration-exception: "
+                + ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
     private String getErrorMessage(ObjectError objectError) {
         if (objectError instanceof FieldError) {
             String field = ((FieldError) objectError).getField();
