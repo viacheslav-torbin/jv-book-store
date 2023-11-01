@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @PostConstruct
     public void init() {
-        userRole = roleRepository.findRoleByName(RoleName.ROLE_USER);
+        userRole = roleRepository.findRoleByRoleName(RoleName.ROLE_USER);
     }
 
     @Override
