@@ -35,17 +35,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, headers, status);
     }
 
-    @ExceptionHandler(value = {EntityNotFoundException.class})
+    @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {DataProcessingException.class})
+    @ExceptionHandler(DataProcessingException.class)
     public ResponseEntity<Object> handleDataProcessingException(DataProcessingException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    @ExceptionHandler(value = {RegistrationException.class})
+    @ExceptionHandler(RegistrationException.class)
     protected ResponseEntity<String> handleRegistrationExceptions(RegistrationException ex) {
         return new ResponseEntity<>("registration-exception: "
                 + ex.getMessage(), HttpStatus.CONFLICT);

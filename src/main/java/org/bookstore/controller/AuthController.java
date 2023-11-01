@@ -2,9 +2,9 @@ package org.bookstore.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.bookstore.dto.user.RegisterUserRequest;
 import org.bookstore.dto.user.UserLoginRequestDto;
 import org.bookstore.dto.user.UserLoginResponseDto;
+import org.bookstore.dto.user.UserRegistrationRequestDto;
 import org.bookstore.dto.user.UserResponseDto;
 import org.bookstore.exceptions.RegistrationException;
 import org.bookstore.security.AuthenticationService;
@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public UserResponseDto register(@RequestBody @Valid RegisterUserRequest request)
+    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {
         return userService.register(request);
     }
