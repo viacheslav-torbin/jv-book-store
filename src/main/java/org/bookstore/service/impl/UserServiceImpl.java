@@ -1,7 +1,6 @@
 package org.bookstore.service.impl;
 
 import jakarta.annotation.PostConstruct;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.bookstore.dto.user.UserRegistrationRequestDto;
 import org.bookstore.dto.user.UserResponseDto;
@@ -36,14 +35,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RegistrationException("Unable to complete registration");
         }
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setShippingAddress(request.getShippingAddress());
-        user.setRoles(Set.of(userRole));
-        User savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(userMapper.toUser(request));
         return userMapper.toUserResponse(savedUser);
     }
 }

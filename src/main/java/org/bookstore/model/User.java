@@ -38,8 +38,6 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String lastName;
     private String shippingAddress;
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private boolean isDeleted = false;
 
     @ManyToMany
@@ -47,6 +45,8 @@ public class User implements UserDetails {
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Role> roles = new HashSet<>();
 
     @Override
