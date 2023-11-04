@@ -17,7 +17,7 @@ public class UserRegistrationRequestDto {
     private String password;
     @NotBlank
     @Size(max = 255, message = "Maximum allowed size 255 characters")
-    private String repeatePassword;
+    private String repeatPassword;
     @NotBlank(message = "First name must not be null or empty")
     @Size(max = 255, message = "Maximum allowed size 255 characters")
     private String firstName;

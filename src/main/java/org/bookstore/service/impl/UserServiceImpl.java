@@ -15,6 +15,8 @@ import org.bookstore.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -35,7 +37,10 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RegistrationException("Unable to complete registration");
         }
-        User savedUser = userRepository.save(userMapper.toUser(request));
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Set.of(userRole));
+        User savedUser = userRepository.save(user);
         return userMapper.toUserResponse(savedUser);
     }
 }
