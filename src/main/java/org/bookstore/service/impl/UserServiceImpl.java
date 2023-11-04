@@ -1,6 +1,7 @@
 package org.bookstore.service.impl;
 
 import jakarta.annotation.PostConstruct;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.bookstore.dto.user.UserRegistrationRequestDto;
 import org.bookstore.dto.user.UserResponseDto;
@@ -14,8 +15,6 @@ import org.bookstore.repository.UserRepository;
 import org.bookstore.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
