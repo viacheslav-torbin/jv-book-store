@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changes/create-books.yaml
   - include:
       file: db/changelog/changes/create-users.yaml
+  - include:
+      file: db/changelog/changes/create-categories.yaml
+  - include:
+      file: db/changelog/changes/create-books-categories.yaml
