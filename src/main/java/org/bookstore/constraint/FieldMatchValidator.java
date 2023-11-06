@@ -6,19 +6,20 @@ import java.util.Objects;
 import org.springframework.beans.BeanWrapperImpl;
 
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
-    private String field;
-    private String fieldMatch;
+    private String firstField;
+    private String secondField;
 
     @Override
     public void initialize(FieldMatch constraintAnnotation) {
-        this.field = constraintAnnotation.fields()[0];
-        this.fieldMatch = constraintAnnotation.fields()[1];
+        this.firstField = constraintAnnotation.fields()[0];
+        this.secondField = constraintAnnotation.fields()[1];
     }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
-        Object field = new BeanWrapperImpl(value).getPropertyValue(this.field);
-        Object fieldMatch = new BeanWrapperImpl(value).getPropertyValue(this.fieldMatch);
+        BeanWrapperImpl beanWrapper = new BeanWrapperImpl(value);
+        Object field = beanWrapper.getPropertyValue(this.firstField);
+        Object fieldMatch = beanWrapper.getPropertyValue(this.secondField);
         return Objects.equals(field, fieldMatch);
     }
 }

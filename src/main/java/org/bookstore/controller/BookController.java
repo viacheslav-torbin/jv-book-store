@@ -33,7 +33,6 @@ public class BookController {
     private final BookService bookService;
 
     @PreAuthorize("hasRole('USER')")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Getting all books")
     @GetMapping
     List<BookDto> getAll(@PageableDefault Pageable pageable) {
@@ -41,7 +40,6 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Getting book by id")
     @GetMapping("/{id}")
     public BookDto getBookById(@PathVariable @Positive Long id) {
@@ -57,7 +55,6 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Updating book by id")
     @PutMapping("/{id}")
     public void updateBookById(@PathVariable @Positive Long id,

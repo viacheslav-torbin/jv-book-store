@@ -8,7 +8,6 @@ import org.bookstore.dto.user.UserResponseDto;
 import org.bookstore.exceptions.RegistrationException;
 import org.bookstore.mapper.UserMapper;
 import org.bookstore.model.Role;
-import org.bookstore.model.RoleName;
 import org.bookstore.model.User;
 import org.bookstore.repository.RoleRepository;
 import org.bookstore.repository.UserRepository;
@@ -27,13 +26,13 @@ public class UserServiceImpl implements UserService {
 
     @PostConstruct
     public void init() {
-        userRole = roleRepository.findRoleByRoleName(RoleName.ROLE_USER);
+        userRole = roleRepository.findRoleByRoleName(Role.RoleName.ROLE_USER);
     }
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto request)
             throws RegistrationException {
-        if (userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.email())) {
             throw new RegistrationException("Unable to complete registration");
         }
         User user = userMapper.toUser(request);
