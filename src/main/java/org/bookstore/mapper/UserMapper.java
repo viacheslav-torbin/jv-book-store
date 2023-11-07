@@ -1,11 +1,10 @@
 package org.bookstore.mapper;
 
-import org.bookstore.dto.book.BookDto;
-import org.bookstore.dto.book.CreateBookRequestDto;
-import org.bookstore.model.Book;
+import org.bookstore.dto.user.UserRegistrationRequestDto;
+import org.bookstore.dto.user.UserResponseDto;
+import org.bookstore.model.User;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueCheckStrategy;
 
 @Mapper(componentModel = "spring",
@@ -13,10 +12,10 @@ import org.mapstruct.NullValueCheckStrategy;
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
         implementationPackage = "<PACKAGE_NAME>.impl"
 )
-public interface BookMapper {
-    BookDto toDto(Book book);
+public interface UserMapper {
+    UserResponseDto toUserResponse(User user);
 
-    Book toBook(CreateBookRequestDto bookRequestDto);
+    User toUser(UserRegistrationRequestDto requestDto);
 
-    void updateBook(CreateBookRequestDto book, @MappingTarget Book entity);
+    User toUser(UserResponseDto responseDto);
 }
