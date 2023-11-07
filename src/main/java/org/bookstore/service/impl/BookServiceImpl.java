@@ -40,8 +40,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAllByCategoryId(Long id) {
-        return bookRepository.findAllByCategories_Id(id);
+    public List<Book> findAllByCategoryId(Long id, Pageable pageable) {
+        return bookRepository.findAllByCategories_Id(id, pageable);
     }
 
     @Override
