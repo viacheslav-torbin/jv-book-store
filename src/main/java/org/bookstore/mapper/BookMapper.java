@@ -1,9 +1,11 @@
 package org.bookstore.mapper;
 
+import java.util.HashSet;
 import org.bookstore.dto.book.BookDto;
 import org.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import org.bookstore.dto.book.CreateBookRequestDto;
 import org.bookstore.model.Book;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -22,4 +24,9 @@ public interface BookMapper {
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
     void updateBook(CreateBookRequestDto book, @MappingTarget Book entity);
+
+    @AfterMapping
+    default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
+        bookDto.setCategories(new HashSet<>(book.getCategories()));
+    }
 }

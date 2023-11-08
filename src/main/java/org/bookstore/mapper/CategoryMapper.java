@@ -16,8 +16,7 @@ import org.mapstruct.NullValueCheckStrategy;
 public interface CategoryMapper {
     CategoryDto toDto(Category category);
 
-    Category toEntity(CategoryDto categoryDto);
+    Category toEntity(CreateCategoryRequestDto categoryDto);
 
-    void updateCategory(CreateCategoryRequestDto category, @MappingTarget Category entity);
-
+    void updateCategory(CreateCategoryRequestDto request, @MappingTarget Category category);
 }

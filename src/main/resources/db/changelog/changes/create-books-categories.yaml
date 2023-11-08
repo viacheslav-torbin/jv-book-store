@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-    id: createTable_Book_Category
+    id: create_table_book_category
     author: Viacheslav Torbin
     changes:
       - createTable:
@@ -10,23 +10,23 @@ databaseChangeLog:
                 name: book_id
                 type: bigint
                 constraints:
-                  foreignKeyName: FK_BookCategory_Book
+                  foreignKeyName: fk_book_category_book
             - column:
                 name: category_id
                 type: bigint
                 constraints:
-                  foreignKeyName: FK_BookCategory_Category
+                  foreignKeyName: fk_book_category_category
 
       - addForeignKeyConstraint:
           baseTableName: book_category
           baseColumnNames: book_id
           referencedTableName: books
           referencedColumnNames: id
-          constraintName: FK_BookCategory_Book
+          constraintName: fk_book_category_book
 
       - addForeignKeyConstraint:
           baseTableName: book_category
           baseColumnNames: category_id
           referencedTableName: categories
           referencedColumnNames: id
-          constraintName: FK_BookCategory_Category
+          constraintName: fk_book_category_category

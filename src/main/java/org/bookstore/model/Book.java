@@ -38,7 +38,7 @@ public class Book {
     private String description;
     private String coverImage;
     @ManyToMany
-    @JoinTable(name = "book_category",
+    @JoinTable(name = "book_categories",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
