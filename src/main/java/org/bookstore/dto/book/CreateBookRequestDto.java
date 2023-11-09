@@ -24,8 +24,8 @@ public record CreateBookRequestDto(
         @Size(max = 255, message = "Maximum allowed size 255 characters")
         String description,
         @Size(max = 255, message = "Maximum allowed size 255 characters")
+        сategories
         String coverImage,
 
-        Set<Category> categories
-)
-{}
+        Set<Category> categories) {
+}

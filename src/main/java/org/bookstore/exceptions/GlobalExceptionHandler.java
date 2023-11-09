@@ -47,8 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RegistrationException.class)
     protected ResponseEntity<String> handleRegistrationExceptions(RegistrationException ex) {
-        return new ResponseEntity<>("registration-exception: "
-                + ex.getMessage(), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     private String getErrorMessage(ObjectError objectError) {
