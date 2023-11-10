@@ -1,8 +1,12 @@
 package org.bookstore.mapper;
 
+import java.util.stream.Collectors;
 import org.bookstore.dto.book.BookDto;
+import org.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import org.bookstore.dto.book.CreateBookRequestDto;
 import org.bookstore.model.Book;
+import org.bookstore.model.Category;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -16,7 +20,17 @@ import org.mapstruct.NullValueCheckStrategy;
 public interface BookMapper {
     BookDto toDto(Book book);
 
-    Book toBook(CreateBookRequestDto bookRequestDto);
+    Book toEntity(CreateBookRequestDto bookDto);
+
+    BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
     void updateBook(CreateBookRequestDto book, @MappingTarget Book entity);
+
+    @AfterMapping
+    default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
+        bookDto.setCategoriesIds(book.getCategories()
+                .stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet()));
+    }
 }

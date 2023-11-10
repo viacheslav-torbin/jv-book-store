@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Set;
+import org.bookstore.model.Category;
 
 public record CreateBookRequestDto(
         @NotBlank(message = "Title must not be null or empty")
@@ -22,5 +24,6 @@ public record CreateBookRequestDto(
         @Size(max = 255, message = "Maximum allowed size 255 characters")
         String description,
         @Size(max = 255, message = "Maximum allowed size 255 characters")
-        String coverImage) {
+        String coverImage,
+        Set<Category> categories) {
 }
