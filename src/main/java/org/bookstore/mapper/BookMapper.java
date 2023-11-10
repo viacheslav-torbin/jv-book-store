@@ -1,8 +1,6 @@
 package org.bookstore.mapper;
 
-import java.util.HashSet;
 import java.util.stream.Collectors;
-
 import org.bookstore.dto.book.BookDto;
 import org.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import org.bookstore.dto.book.CreateBookRequestDto;
