@@ -1,10 +1,13 @@
 package org.bookstore.mapper;
 
 import java.util.HashSet;
+import java.util.stream.Collectors;
+
 import org.bookstore.dto.book.BookDto;
 import org.bookstore.dto.book.BookDtoWithoutCategoryIds;
 import org.bookstore.dto.book.CreateBookRequestDto;
 import org.bookstore.model.Book;
+import org.bookstore.model.Category;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -27,6 +30,9 @@ public interface BookMapper {
 
     @AfterMapping
     default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
-        bookDto.setCategories(new HashSet<>(book.getCategories()));
+        bookDto.setCategoriesIds(book.getCategories()
+                .stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet()));
     }
 }
