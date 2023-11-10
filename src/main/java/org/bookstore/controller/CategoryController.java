@@ -34,11 +34,13 @@ public class CategoryController {
         return categoryService.save(categoryDto);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public List<Category> getAll(@PageableDefault(size = 5) Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping(value = "/{id}")
     public CategoryDto getCategoryById(@PathVariable Long id) {
         return categoryService.getById(id);
@@ -56,6 +58,7 @@ public class CategoryController {
         categoryService.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}/books")
     public List<BookDto> getBooksByCategoryId(@PathVariable Long id,
                                               @PageableDefault(size = 5) Pageable pageable) {
