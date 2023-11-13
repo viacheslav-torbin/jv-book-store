@@ -54,7 +54,7 @@ public class ShoppingCartController {
             description = "Update quantity of a book in the shopping cart")
     public CartItemDto updateBookQuantity(@PathVariable @Positive Long cartItemId,
                                           @RequestBody @Valid CartItemUpdateDto updateDto) {
-        return shoppingCartService.updateCartItem(cartItemId, updateDto);
+        return shoppingCartService.updateCartItem(cartItemId, updateDto.quantity());
     }
 
     @PreAuthorize("hasRole('USER')")

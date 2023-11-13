@@ -19,12 +19,15 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @JoinColumn(name = "shopping_cart_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private ShoppingCart shoppingCart;
+
     @JoinColumn(name = "book_id", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
     private Book book;
+
     @Column(nullable = false)
     private int quantity;
 }

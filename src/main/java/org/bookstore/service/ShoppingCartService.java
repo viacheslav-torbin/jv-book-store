@@ -2,7 +2,6 @@ package org.bookstore.service;
 
 import org.bookstore.dto.shoppingcart.CartItemDto;
 import org.bookstore.dto.shoppingcart.CartItemRequestDto;
-import org.bookstore.dto.shoppingcart.CartItemUpdateDto;
 import org.bookstore.dto.shoppingcart.ShoppingCartDto;
 
 public interface ShoppingCartService {
@@ -10,7 +9,7 @@ public interface ShoppingCartService {
 
     CartItemDto addCartItem(CartItemRequestDto requestDto);
 
-    CartItemDto updateCartItem(Long itemId, CartItemUpdateDto updateDto);
+    CartItemDto updateCartItem(Long cartItemId, int quantity);
 
     void removeCartItem(Long itemId);
 }
