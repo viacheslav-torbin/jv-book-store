@@ -24,22 +24,22 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-    private final CartItemRepository itemRepository;
-    private final ShoppingCartRepository repository;
+    private final CartItemRepository cartItemRepository;
+    private final ShoppingCartRepository shoppingCartRepository;
     private final BookRepository bookRepository;
-    private final ShoppingCartMapper cartMapper;
-    private final CartItemMapper itemMapper;
+    private final ShoppingCartMapper shoppingCartMapper;
+    private final CartItemMapper cartItemMapper;
 
     @Override
     public void createShoppingCart(User user) {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
-        repository.save(shoppingCart);
+        shoppingCartRepository.save(shoppingCart);
     }
 
     @Override
     public ShoppingCartDto getCart(Long userId) {
-        return cartMapper.toDto(repository.findByUserId(userId));
+        return shoppingCartMapper.toDto(shoppingCartRepository.findByUserId(userId));
     }
 
     @Transactional
@@ -49,46 +49,47 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Book with id: %d is not found", itemDto.bookId())
                 ));
-        ShoppingCart cart = repository.findByUserId(userId);
+        ShoppingCart cart = shoppingCartRepository.findByUserId(userId);
         Set<CartItem> cartItems = cart.getCartItems();
         for (CartItem item : cartItems) {
             if (Objects.equals(item.getBook().getId(), itemDto.bookId())) {
                 item.setQuantity(item.getQuantity() + itemDto.quantity());
-                repository.save(cart);
-                return cartMapper.toDto(cart);
+                shoppingCartRepository.save(cart);
+                return shoppingCartMapper.toDto(cart);
             }
         }
         addCartItemToShoppingCart(itemDto, book, cart);
-        repository.save(cart);
-        return cartMapper.toDto(cart);
+        shoppingCartRepository.save(cart);
+        return shoppingCartMapper.toDto(cart);
     }
 
     @Transactional
     @Override
     public ShoppingCartDto updateQuantity(Long userId,
                                               Long cartItemId, CartItemUpdateDto itemDto) {
-        ShoppingCart cart = repository.findByUserId(userId);
+        ShoppingCart cart = shoppingCartRepository.findByUserId(userId);
         CartItem cartItem = null;
-        Optional<CartItem> optionalCartItem = itemRepository
+        Optional<CartItem> optionalCartItem = cartItemRepository
                 .findByIdAndShoppingCartId(cartItemId, cart.getId());
         if (optionalCartItem.isPresent()) {
             cartItem = optionalCartItem.get();
             cartItem.setQuantity(itemDto.quantity());
-            itemRepository.save(cartItem);
+            cartItemRepository.save(cartItem);
         } else {
             throw new EntityNotFoundException(
                     String.format("No cart item with id: %d for user: %d", cartItemId, userId)
             );
         }
 
-        return cartMapper.toDto(cart);
+        return shoppingCartMapper.toDto(cart);
     }
 
     @Transactional
     @Override
     public void deleteBook(Long userId, Long itemId) {
-        ShoppingCart shoppingCart = repository.findByUserId(userId);
-        CartItem cartItem = itemRepository.findByIdAndShoppingCartId(itemId, shoppingCart.getId())
+        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId);
+        CartItem cartItem = cartItemRepository
+                .findByIdAndShoppingCartId(itemId, shoppingCart.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("No such cartItem with id %d in shopping cart", itemId)
                 ));
@@ -98,7 +99,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private void addCartItemToShoppingCart(CartItemRequestDto itemDto,
                                            Book book,
                                            ShoppingCart cart) {
-        CartItem cartItem = itemMapper.toCartItem(itemDto);
+        CartItem cartItem = cartItemMapper.toCartItem(itemDto);
         cartItem.setBook(book);
         cart.addItemToCart(cartItem);
     }
