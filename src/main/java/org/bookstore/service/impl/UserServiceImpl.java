@@ -11,6 +11,7 @@ import org.bookstore.model.Role;
 import org.bookstore.model.User;
 import org.bookstore.repository.RoleRepository;
 import org.bookstore.repository.UserRepository;
+import org.bookstore.service.ShoppingCartService;
 import org.bookstore.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final ShoppingCartService shoppingCartService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Set.of(userRole));
         User savedUser = userRepository.save(user);
+        shoppingCartService.createShoppingCart(savedUser);
         return userMapper.toUserResponse(savedUser);
     }
 }

@@ -24,4 +24,14 @@ public class ShoppingCart {
     private User user;
     @OneToMany(mappedBy = "shoppingCart", cascade = CascadeType.ALL)
     private Set<CartItem> cartItems = new HashSet<>();
+
+    public void addItemToCart(CartItem cartItem) {
+        cartItem.setShoppingCart(this);
+        cartItems.add(cartItem);
+    }
+
+    public void removeItemFromCart(CartItem cartItem) {
+        cartItems.remove(cartItem);
+        cartItem.setShoppingCart(null);
+    }
 }

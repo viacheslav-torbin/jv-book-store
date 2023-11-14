@@ -5,13 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.bookstore.dto.shoppingcart.CartItemDto;
 import org.bookstore.dto.shoppingcart.CartItemRequestDto;
 import org.bookstore.dto.shoppingcart.CartItemUpdateDto;
 import org.bookstore.dto.shoppingcart.ShoppingCartDto;
+import org.bookstore.model.User;
 import org.bookstore.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,39 +31,47 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RequestMapping(value = "/cart")
 public class ShoppingCartController {
-    private final ShoppingCartService shoppingCartService;
+    private final ShoppingCartService cartService;
 
-    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Get the shopping cart of a user")
     @GetMapping
-    @Operation(summary = "Get shopping cart",
-            description = "Retrieve user's shopping cart")
-    public ShoppingCartDto getShoppingCart() {
-        return shoppingCartService.getShoppingCart();
+    @PreAuthorize("hasRole('USER')")
+    public ShoppingCartDto getShoppingCart(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return cartService.getCart(user.getId());
     }
 
-    @PreAuthorize("hasRole('USER')")
+    @Operation(summary = "Add a book to the shopping cart", description = """
+                    Add a new book or update the quantity of existing in the cart of user""")
     @PostMapping
-    @Operation(summary = "Add book to cart",
-            description = "Add book to the shopping cart")
-    public CartItemDto addBookToCart(@RequestBody @Valid CartItemRequestDto requestDto) {
-        return shoppingCartService.addCartItem(requestDto);
-    }
-
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/cart-items/{cartItemId}")
-    @Operation(summary = "Update quantity",
-            description = "Update quantity of a book in the shopping cart")
-    public CartItemDto updateBookQuantity(@PathVariable @Positive Long cartItemId,
-                                          @RequestBody @Valid CartItemUpdateDto updateDto) {
-        return shoppingCartService.updateCartItem(cartItemId, updateDto.quantity());
+    public ShoppingCartDto addBook(Authentication authentication,
+                                   @RequestBody @Valid CartItemRequestDto cartItem) {
+        User user = (User) authentication.getPrincipal();
+        return cartService.addBook(user.getId(), cartItem);
     }
 
+    @Operation(summary = "Update the number of books in the cart", description = """
+                    Update the number of existing books in the cart of a logged-in user.
+                    Parameters : cart item id and new quantity""")
+    @PutMapping("/cart-items/{cartItemId}")
+    @PreAuthorize("hasRole('USER')")
+    public ShoppingCartDto updateBookQuantity(Authentication authentication,
+                                              @PathVariable @Positive Long cartItemId,
+                                              @RequestBody @Valid CartItemUpdateDto item) {
+        User user = (User) authentication.getPrincipal();
+        return cartService.updateQuantity(user.getId(), cartItemId, item);
+    }
+
+    @Operation(summary = "Delete book from the cart of user", description = """
+                    Delete book from the cart of a user.
+                    Parameter: id of cart item""")
+    @DeleteMapping("/cart-items/{cartItemId}")
     @PreAuthorize("hasRole('USER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/cart-items/{cartItemId}")
-    @Operation(summary = "Delete book from cart",
-            description = "Remove a book from the shopping cart")
-    public void deleteBookFromCart(@PathVariable @Positive Long cartItemId) {
-        shoppingCartService.removeCartItem(cartItemId);
+    public void deleteBookFromCart(Authentication authentication,
+                                   @PathVariable @Positive Long cartItemId) {
+        User user = (User) authentication.getPrincipal();
+        cartService.deleteBook(user.getId(), cartItemId);
     }
 }

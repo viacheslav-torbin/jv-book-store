@@ -1,6 +1,7 @@
 package org.bookstore.mapper;
 
 import org.bookstore.dto.shoppingcart.CartItemDto;
+import org.bookstore.dto.shoppingcart.CartItemRequestDto;
 import org.bookstore.model.CartItem;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -17,5 +18,7 @@ public interface CartItemMapper {
     @Mapping(source = "book.id", target = "bookId")
     @Mapping(source = "book.title", target = "bookTitle")
     CartItemDto toDto(CartItem cartItem);
+
+    CartItem toCartItem(CartItemRequestDto itemDto);
 }
 
