@@ -18,7 +18,7 @@ import lombok.ToString;
 
 @Entity
 @Data
-@Table(name = "shopping_cart")
+@Table(name = "shopping_carts")
 public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
