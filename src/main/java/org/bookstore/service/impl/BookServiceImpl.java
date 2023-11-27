@@ -65,12 +65,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
+        bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No book with id " + id));
         bookRepository.deleteById(id);
     }
 
     private void setCategories(CreateBookRequestDto requestDto, Book book) {
-        Set<Category> categorySet = requestDto.categories().stream()
-                .map(Category::getId)
+        Set<Category> categorySet = requestDto.categoryIds().stream()
                 .map(categoryRepository::getReferenceById)
                 .collect(Collectors.toSet());
         book.setCategories(categorySet);
