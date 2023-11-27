@@ -24,13 +24,13 @@ public interface BookMapper {
 
     BookDtoWithoutCategoryIds toDtoWithoutCategories(Book book);
 
-    void updateBook(CreateBookRequestDto book, @MappingTarget Book entity);
-
     @AfterMapping
-    default void setCategoryIds(@MappingTarget BookDto bookDto, Book book) {
-        bookDto.setCategoriesIds(book.getCategories()
-                .stream()
+    default void setCategories(@MappingTarget BookDto bookDto, Book book) {
+        bookDto.setCategoriesIds(book.getCategories().stream()
                 .map(Category::getId)
                 .collect(Collectors.toSet()));
     }
+
+    void updateBook(CreateBookRequestDto requestDto,
+                    @MappingTarget Book book);
 }
