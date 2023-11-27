@@ -30,5 +30,7 @@ public interface BookMapper {
                 .map(Category::getId)
                 .collect(Collectors.toSet()));
     }
-    void updateBook(CreateBookRequestDto requestDto, @MappingTarget Book book);
+
+    void updateBook(CreateBookRequestDto requestDto,
+                    @MappingTarget Book book);
 }

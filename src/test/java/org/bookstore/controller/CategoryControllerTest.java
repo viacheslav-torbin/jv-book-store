@@ -1,11 +1,19 @@
 package org.bookstore.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.util.Arrays;
+import java.util.List;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.bookstore.dto.book.BookDto;
 import org.bookstore.dto.category.CategoryDto;
 import org.bookstore.dto.category.CreateCategoryRequestDto;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,14 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {
@@ -65,7 +65,10 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
+        CategoryDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                CategoryDto.class
+        );
         assertThat(actual)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("name", request.name())
@@ -81,7 +84,10 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<CategoryDto> actual = Arrays.stream(objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto[].class)).toList();
+        List<CategoryDto> actual = Arrays.stream(objectMapper.readValue(
+                        result.getResponse().getContentAsString(),
+                        CategoryDto[].class))
+                .toList();
         assertThat(actual).hasSize(3);
         assertThat(actual)
                 .element(0)
@@ -98,7 +104,10 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
+        CategoryDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                CategoryDto.class
+        );
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("name", "Horror")
                 .hasFieldOrPropertyWithValue("description", "Horror_desc");
@@ -119,7 +128,10 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDto.class);
+        CategoryDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                CategoryDto.class
+        );
         assertThat(actual)
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("name", updateRequest.name())

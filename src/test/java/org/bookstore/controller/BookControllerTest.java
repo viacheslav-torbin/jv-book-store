@@ -1,7 +1,18 @@
 package org.bookstore.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import lombok.SneakyThrows;
 import org.bookstore.dto.book.BookDto;
 import org.bookstore.dto.book.CreateBookRequestDto;
@@ -17,16 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {
@@ -96,7 +97,9 @@ public class BookControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        List<BookDto> actual = Arrays.stream(objectMapper.readValue(result.getResponse().getContentAsString(), BookDto[].class)).toList();
+        List<BookDto> actual = Arrays.stream(objectMapper.readValue(
+                        result.getResponse().getContentAsString(), BookDto[].class))
+                .toList();
         assertThat(actual).hasSize(3);
         assertThat(actual)
                 .element(0)
@@ -111,13 +114,15 @@ public class BookControllerTest {
 
     @Test
     @DisplayName("Getting book by id")
-    @WithMockUser(username = "admin", authorities = {"ADMIN",  "USER"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void getBookById_existingBook_BookDto() throws Exception {
         long id = 1;
         MvcResult result = mockMvc.perform(get("/books/" + id))
                 .andExpect(status().isOk())
                 .andReturn();
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
+                BookDto.class
+        );
 
         assertThat(actual).isNotNull()
                 .hasFieldOrPropertyWithValue("id", 1L)
@@ -131,7 +136,7 @@ public class BookControllerTest {
 
     @Test
     @DisplayName("Updating book by id")
-    @WithMockUser(username = "admin", authorities = {"ADMIN",  "USER"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN", "USER"})
     void updateBookById_existingBook_BookDto() throws Exception {
         long id = 1;
         CreateBookRequestDto request = new CreateBookRequestDto(
@@ -150,7 +155,10 @@ public class BookControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(), BookDto.class);
+        BookDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                BookDto.class
+        );
 
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("author", "author_changed")

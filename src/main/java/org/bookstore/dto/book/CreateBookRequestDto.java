@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Set;
-import org.bookstore.model.Category;
 
 public record CreateBookRequestDto(
         @NotBlank(message = "Title must not be null or empty")
