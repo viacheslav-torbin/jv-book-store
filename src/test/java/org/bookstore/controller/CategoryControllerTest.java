@@ -2,6 +2,7 @@ package org.bookstore.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -13,7 +14,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.util.Arrays;
 import java.util.List;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import org.bookstore.dto.category.CategoryDto;
 import org.bookstore.dto.category.CreateCategoryRequestDto;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +34,6 @@ import org.springframework.web.context.WebApplicationContext;
         "classpath:/scripts/categories/delete-categories.sql",
         "classpath:/scripts/categories/create-categories.sql"
 })
-@Slf4j
 public class CategoryControllerTest {
     protected static MockMvc mockMvc;
     private static ObjectMapper objectMapper;
@@ -136,5 +135,49 @@ public class CategoryControllerTest {
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("name", updateRequest.name())
                 .hasFieldOrPropertyWithValue("description", updateRequest.description());
+    }
+
+    @Test
+    @DisplayName("Delete existing category")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void deleteById_existingBook_Ok() throws Exception {
+        mockMvc.perform(delete("/categories/1"))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("Find non existing category")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void findById_nonExistingCategory_Exception() throws Exception {
+        mockMvc.perform(get("/categories/100"))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("Update non existing book")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void updateById_nonExistingCategory_Exception() throws Exception {
+        long id = 100;
+        CreateCategoryRequestDto request = new CreateCategoryRequestDto(
+                "name",
+                "descr_new"
+        );
+
+        mockMvc.perform(put("/categories/" + id)
+                        .content(objectMapper.writeValueAsBytes(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("Delete non existing category")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void deleteById_nonExistingCategory_Exception() throws Exception {
+        mockMvc.perform(delete("/categories/100"))
+                .andExpect(status().isNotFound())
+                .andReturn();
     }
 }

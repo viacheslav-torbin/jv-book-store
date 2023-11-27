@@ -2,6 +2,7 @@ package org.bookstore.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -181,9 +182,59 @@ public class BookControllerTest {
                 Set.of(1L)
         );
 
-        MvcResult result = mockMvc.perform(put("/books/" + id)
+        mockMvc.perform(put("/books/" + id)
                         .content(objectMapper.writeValueAsBytes(request))
                         .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("Delete existing book")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void deleteById_existingBook_Ok() throws Exception {
+        mockMvc.perform(delete("/books/1"))
+                .andExpect(status().isNoContent())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("Find non existing book")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void findById_nonExistingBook_Exception() throws Exception {
+        mockMvc.perform(get("/books/100"))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
+    @DisplayName("Update non existing book")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void updateById_nonExistingBook_Exception() throws Exception {
+        long id = 100;
+        CreateBookRequestDto request = new CreateBookRequestDto(
+                "title",
+                "author_changed",
+                "12345678900",
+                BigDecimal.TEN,
+                "descr",
+                "image_changed",
+                Set.of(1L)
+        );
+
+        mockMvc.perform(put("/books/" + id)
+                        .content(objectMapper.writeValueAsBytes(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+    }
+
+    @Test
+    @DisplayName("Delete non existing book")
+    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    void deleteById_nonExistingBook_Exception() throws Exception {
+        mockMvc.perform(delete("/books/100"))
                 .andExpect(status().isNotFound())
                 .andReturn();
     }

@@ -1,10 +1,10 @@
 package org.bookstore.service.impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.bookstore.dto.category.CategoryDto;
 import org.bookstore.dto.category.CreateCategoryRequestDto;
+import org.bookstore.exceptions.EntityNotFoundException;
 import org.bookstore.mapper.CategoryMapper;
 import org.bookstore.model.Category;
 import org.bookstore.repository.CategoryRepository;
@@ -42,13 +42,15 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto update(Long id, CreateCategoryRequestDto categoryDto) {
         Category categoryFromDb = categoryRepository.findById(id)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("Can't find category by id " + id));
+                        () -> new EntityNotFoundException("No category by id " + id));
         categoryMapper.updateCategory(categoryDto, categoryFromDb);
         return categoryMapper.toDto(categoryRepository.save(categoryFromDb));
     }
 
     @Override
     public void deleteById(Long id) {
+        categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No category by id " + id));
         categoryRepository.deleteById(id);
     }
 }
