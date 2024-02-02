@@ -59,7 +59,7 @@ public class CategoryControllerTest {
         );
 
         MvcResult result = mockMvc.perform(post("/categories")
-                        .content(objectMapper.writeValueAsBytes(request))
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -122,7 +122,7 @@ public class CategoryControllerTest {
                 "some new scary text"
         );
         MvcResult result = mockMvc.perform(put("/categories/" + id)
-                        .content(objectMapper.writeValueAsBytes(updateRequest))
+                        .content(objectMapper.writeValueAsString(updateRequest))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -142,8 +142,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
     void deleteById_existingBook_Ok() throws Exception {
         mockMvc.perform(delete("/categories/1"))
-                .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -151,8 +150,7 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
     void findById_nonExistingCategory_Exception() throws Exception {
         mockMvc.perform(get("/categories/100"))
-                .andExpect(status().isNotFound())
-                .andReturn();
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -166,10 +164,9 @@ public class CategoryControllerTest {
         );
 
         mockMvc.perform(put("/categories/" + id)
-                        .content(objectMapper.writeValueAsBytes(request))
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andReturn();
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -177,7 +174,6 @@ public class CategoryControllerTest {
     @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
     void deleteById_nonExistingCategory_Exception() throws Exception {
         mockMvc.perform(delete("/categories/100"))
-                .andExpect(status().isNotFound())
-                .andReturn();
+                .andExpect(status().isNotFound());
     }
 }

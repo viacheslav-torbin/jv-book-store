@@ -24,5 +24,6 @@ public record CreateBookRequestDto(
         String description,
         @Size(max = 255, message = "Maximum allowed size 255 characters")
         String coverImage,
+        @NotNull
         Set<Long> categoryIds) {
 }

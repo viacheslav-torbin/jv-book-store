@@ -60,7 +60,7 @@ public class BookControllerTest {
             "classpath:/scripts/books/delete-books.sql",
             "classpath:/scripts/categories/create-categories.sql"
     })
-    @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
     void createBook_validRequestDto_returnsDto() throws Exception {
         CreateBookRequestDto request = new CreateBookRequestDto(
                 "title",
@@ -73,7 +73,7 @@ public class BookControllerTest {
         );
 
         MvcResult result = mockMvc.perform(post("/books")
-                        .content(objectMapper.writeValueAsBytes(request))
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -151,7 +151,7 @@ public class BookControllerTest {
         );
 
         MvcResult result = mockMvc.perform(put("/books/" + id)
-                        .content(objectMapper.writeValueAsBytes(request))
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -167,10 +167,33 @@ public class BookControllerTest {
     }
 
     @Test
+    @DisplayName("Create book with invalid request dto")
+    @Sql(scripts = {
+            "classpath:/scripts/books/delete-books.sql",
+    })
+    @WithMockUser(username = "admin", authorities = {"ADMIN"})
+    void createBook_invalidRequestDto_Exception() throws Exception {
+        CreateBookRequestDto request = new CreateBookRequestDto(
+                "title",
+                "author",
+                "12345678900",
+                BigDecimal.valueOf(-100),
+                "descr",
+                "image",
+                Set.of(1L)
+        );
+
+        mockMvc.perform(post("/books")
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("Update non-existing book")
     @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
     @Sql(scripts = "classpath:/scripts/books/delete-books.sql")
-    void updateBookById_nonExistingBook_exception() throws Exception {
+    void updateBookById_nonExistingBook_Exception() throws Exception {
         long id = 1;
         CreateBookRequestDto request = new CreateBookRequestDto(
                 "title",
@@ -183,10 +206,9 @@ public class BookControllerTest {
         );
 
         mockMvc.perform(put("/books/" + id)
-                        .content(objectMapper.writeValueAsBytes(request))
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andReturn();
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -194,8 +216,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
     void deleteById_existingBook_Ok() throws Exception {
         mockMvc.perform(delete("/books/1"))
-                .andExpect(status().isNoContent())
-                .andReturn();
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -203,8 +224,7 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
     void findById_nonExistingBook_Exception() throws Exception {
         mockMvc.perform(get("/books/100"))
-                .andExpect(status().isNotFound())
-                .andReturn();
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -223,11 +243,9 @@ public class BookControllerTest {
         );
 
         mockMvc.perform(put("/books/" + id)
-                        .content(objectMapper.writeValueAsBytes(request))
+                        .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andReturn();
-
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -235,7 +253,6 @@ public class BookControllerTest {
     @WithMockUser(username = "admin", authorities = {"USER", "ADMIN"})
     void deleteById_nonExistingBook_Exception() throws Exception {
         mockMvc.perform(delete("/books/100"))
-                .andExpect(status().isNotFound())
-                .andReturn();
+                .andExpect(status().isNotFound());
     }
 }
