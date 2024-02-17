@@ -35,7 +35,6 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createOrder(Long userId, CreateOrderRequestDto orderDto) {
         ShoppingCart cart = shoppingCartRepository.findByUserId(userId);
         if (cart.getCartItems().isEmpty()) {
-            // TODO: replace the exception
             throw new EntityNotFoundException("Cart is empty for user: " + userId);
         }
         Order order = orderMapper.cartToOrder(cart, orderDto.shippingAddress());

@@ -42,7 +42,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
-    @Column(nullable = false)
+    @Column(nullable = false, name = "is_deleted")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private boolean isDeleted = false;

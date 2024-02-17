@@ -58,19 +58,20 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto updateBookById(Long id, CreateBookRequestDto book) {
         Book bookFromDb = bookRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Can't update book with id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("No book with id " + id));
         bookMapper.updateBook(book, bookFromDb);
         return bookMapper.toDto(bookRepository.save(bookFromDb));
     }
 
     @Override
     public void deleteById(Long id) {
+        bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("No book with id " + id));
         bookRepository.deleteById(id);
     }
 
     private void setCategories(CreateBookRequestDto requestDto, Book book) {
-        Set<Category> categorySet = requestDto.categories().stream()
-                .map(Category::getId)
+        Set<Category> categorySet = requestDto.categoryIds().stream()
                 .map(categoryRepository::getReferenceById)
                 .collect(Collectors.toSet());
         book.setCategories(categorySet);
