@@ -95,6 +95,6 @@ Start the application
 ```
 
 ## 🔗 Links
-[![cv](https://img.shields.io/badge/MY_CV-green?style=for-the-badge&logo=read.cv)](https://google.com/)
+[![cv](https://img.shields.io/badge/MY_CV-green?style=for-the-badge&logo=read.cv)](https://drive.google.com/file/d/1v0nxkz8jQToeK7fM3cEtgecebwEU2JNW/view?usp=sharing)
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/viacheslav-torbin-5394b6294/)
 
