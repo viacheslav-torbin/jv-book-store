@@ -1,25 +1,24 @@
-
 # Book Store Application
 This is a book store project developed using Spring Boot. It provides a web application for managing a book store, allowing users to view and search for books, add books to their shopping cart, and complete the purchase.
-## Technologies
+Users can register and login with email-password pair.
+Users are able to get all books via preferences, add books to a shop cart, create a new order and view a history of all orders.
+Admins can add, update, delete books and categories. Also, they can change status of user's orders.
 
+## Technologies
+- Java 17
+- Docker
 - Spring boot
 - Spring data JPA
 - Spring security
 - Spring web
 - JWT
 - MySQL
-- H2
 - Swagger
 - Lombok
+- JUnit
 - Mockito
-- Assertj
-
-
 
 ## API Reference
-
-
 
 ### Auth Controller
 
@@ -94,14 +93,6 @@ Start the application
 ```bash
   mvn spring-boot:run
 ```
-## Running Tests
-
-To run tests, run the following command
-
-```bash
-  mvn test
-```
-
 
 ## 🔗 Links
 [![cv](https://img.shields.io/badge/MY_CV-green?style=for-the-badge&logo=read.cv)](https://google.com/)
